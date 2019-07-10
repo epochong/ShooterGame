@@ -64,7 +64,7 @@ public abstract class FlyingObject {
         //负的敌人的高
         y = this.height;
         //y = 0;
-        x = random.nextInt(400 - this.width);
+        x = random.nextInt(World.WIDTH - this.width);
         //负的敌人的高
         y = -this.height;
     }
@@ -161,4 +161,5 @@ public abstract class FlyingObject {
 
 
     int speed;
+
 }

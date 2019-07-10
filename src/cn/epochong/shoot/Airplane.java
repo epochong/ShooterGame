@@ -60,9 +60,15 @@ public class Airplane extends FlyingObject implements Enemy{
     }
 
 
+
     @Override
     public int getScore() {
         //打掉小敌机玩家得一分
         return 1;
+    }
+
+    @Override
+    public BulletEnemy[] shoot() {
+        return new BulletEnemy[0];
     }
 }

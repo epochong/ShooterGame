@@ -7,10 +7,10 @@ package cn.epochong.shoot;
  * @blog epochong.github.io
  * @describe
  */
-public class HeroThread implements Runnable {
+public class ThreadHero implements Runnable {
     Hero hero;
 
-    public HeroThread(Hero hero) {
+    public ThreadHero(Hero hero) {
         this.hero = hero;
     }
 
@@ -22,8 +22,7 @@ public class HeroThread implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            //this.hero.moveTo((int) (Math.random() * 400),600);
+            //this.hero.moveTo((int) (Math.random() * World.WIDTH),World.HEIGHT - 100);
         }
     }
 }

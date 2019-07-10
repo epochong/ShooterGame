@@ -15,19 +15,6 @@ public class JdbcUtils {
     private static final String PWD = "root";
     private static final String URL = "jdbc:mysql://localhost:3306/shoot ?serverTimezone=UTC";
     private static final String DRIVER= "com.mysql.jdbc.Driver";
-    /**
-     * 注册驱动
-     */
-
-
-/*    static {
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
     /**
      * 得到数据库的连接

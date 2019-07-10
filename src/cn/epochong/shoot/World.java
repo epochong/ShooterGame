@@ -2,7 +2,6 @@ package cn.epochong.shoot;
 //相框
 import cn.music.www.AwardMusic;
 import cn.music.www.ExplodeMusic;
-import cn.music.www.LightMusic;
 import cn.music.www.Shootmusic;
 
 import javax.swing.*;
@@ -10,6 +9,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.*;
 //监听器
 //监听事件
@@ -28,11 +28,11 @@ public class World extends JPanel{
     /**
      * 窗口宽度
      */
-    static final int WIDTH = 400;
+    static final int WIDTH = 1920;
     /**
      * 窗口高度
      */
-    static final int HEIGHT = 700;
+    static final int HEIGHT = 1080;
     /**
      * 启动状态
      */
@@ -55,12 +55,8 @@ public class World extends JPanel{
     public int state = START;
     private Sky sky = new Sky();
     private Hero hero = new Hero();
-    private FlyingObject[] enemies = {
-
-    };
-    private Bullet[] bullets = {
-            //new Bullet(180,300)
-    };
+    private FlyingObject[] enemies = {};
+    private Bullet[] bullets = {};
 
     private BigShell[] bigShells = {};
 
@@ -104,8 +100,23 @@ public class World extends JPanel{
         if (enterIndex % 40 == 0) {
             FlyingObject flyingObject = nextOne();
             //每增加一个对象扩容一个
-            enemies = Arrays.copyOf(this.enemies, this.enemies.length + 1);
-            enemies[enemies.length - 1] = flyingObject;
+
+            ArrayList<BulletEnemy> newBulletEnemy = new ArrayList <>();
+            for (int i = 0; i < enemies.length; i++) {
+                if (enemies[i] instanceof Enemy) {
+                    Enemy enemy = (Enemy) enemies[i];
+                    BulletEnemy[] bulletEnemies =  enemy.shoot();
+                    for (int j = 0; j < bulletEnemies.length; j++) {
+                        newBulletEnemy.add(bulletEnemies[j]);
+                    }
+                }
+            }
+            int oldLen = enemies.length;
+            enemies = Arrays.copyOf(this.enemies, this.enemies.length + newBulletEnemy.size() + 1);
+            enemies[oldLen] = flyingObject;
+            for (int i = 0; i < newBulletEnemy.size(); i++) {
+                enemies[oldLen + i + 1] = newBulletEnemy.get(i);
+            }
         }
     }
 
@@ -125,6 +136,7 @@ public class World extends JPanel{
             bigShells[i].step();
         }
 
+
     }
     /**
      * 子弹入场计数器
@@ -138,10 +150,8 @@ public class World extends JPanel{
         //每10秒增1
         shootIndex++;
 
-        //每300秒走一次
-        if(shootIndex % 30 == 0) {
-            Thread thread = new Thread(new ShootMusicThread("ishoot"));
-            thread.start();
+        //每300毫秒走一次
+        if(shootIndex % 25  == 0) {
             Shootmusic shootmusic = new Shootmusic();
             shootmusic.start();
             Bullet[] bs = hero.shoot();
@@ -159,11 +169,12 @@ public class World extends JPanel{
         }
 
     }
-
+    static int bigSpeed = 1;
     int bigShellIndex = 0;
     void shootBigShellAction() {
         bigShellIndex++;
-        if (bigShellIndex % 60 == 0) {
+        if (bigShellIndex % 25 == 0) {
+
             BigShell[] bs = hero.shootBigShell();
             bigShells = Arrays.copyOf(bigShells,bigShells.length + bs.length);
             System.arraycopy(bs,0,bigShells,bigShells.length - bs.length,bs.length);
@@ -205,16 +216,17 @@ public class World extends JPanel{
 
         }
         lights = new Light[0];
-        //System.out.println("light:" + lights.length);
-        /**
+        /*
          * 画的字符的内容
          * 距离左边框的距离
          * 距离上边框的距离
          */
         graphics.setColor(Color.PINK);
-        graphics.drawString("SCORE:" + score,10,25);
+        graphics.setFont(new Font("楷体",Font.BOLD,40));
+
+        graphics.drawString("SCORE:" + score,10,30);
         //画命
-        graphics.drawString("LIFE:" + hero.getLife(),10,45);
+        graphics.drawString("LIFE:" + hero.getLife(),10,70);
         switch(state){
             case START:
                 graphics.drawImage(Images.start,0,0,null);
@@ -224,21 +236,21 @@ public class World extends JPanel{
                 break;
             case GAME_OVER:
                 graphics.drawImage(Images.gameover,0,0,null);
-                graphics.setColor(Color.MAGENTA);
-                graphics.setFont(new Font("楷体",Font.BOLD,26));
-                graphics.drawString("排行榜",150,330);
+                graphics.setColor(Color.orange);
+                graphics.setFont(new Font("楷体",Font.BOLD,40));
+                graphics.drawString("排行榜",World.WIDTH / 2 - 150,World.HEIGHT / 2 - 50);
                 String[] result;
                 try {
                     result = UserDao.getScoreAndUserName();
-                    int y = 360;
+                    int y = World.HEIGHT / 2 - 10;
                     /**
                      * 只显示排名前十的打印排行榜
                      */
                     for (int i = 0; i < 10; i++) {
                         if (result[i] != null) {
-                            graphics.setFont(new Font("Dialog",Font.PLAIN,25));
-                            graphics.drawString(result[i],80,y);
-                            y += 30;
+                            graphics.setFont(new Font("Dialog",Font.BOLD,40));
+                            graphics.drawString(result[i],World.WIDTH / 2 - 200,y);
+                            y += 40;
                         }
 
                     }
@@ -501,6 +513,7 @@ public class World extends JPanel{
     public void checkGameOverAction() {
         if (hero.getLife() <= 0) {
             try {
+
                 UserDao.save(userName,score);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -591,8 +604,10 @@ public class World extends JPanel{
 
         };
         KeyAdapter keyAdapter = new KeyAdapter() {
+
             @Override
             public void keyPressed(KeyEvent e) {
+
                 hero.isShoot2(e);
             }
 
@@ -612,9 +627,9 @@ public class World extends JPanel{
         this.addMouseMotionListener(l);
         this.addKeyListener(keyAdapter);
 
-        Thread actionThread = new Thread(new ActionThread(this));
-        Thread heroThread = new Thread(new HeroThread(hero));
-        Thread bgmThread = new Thread(new BgmMusicThread());
+        Thread actionThread = new Thread(new ThreadAction(this));
+        Thread heroThread = new Thread(new ThreadHero(hero));
+        Thread bgmThread = new Thread(new ThreadBgmMusic());
 
         actionThread.start();
         heroThread.start();
@@ -625,14 +640,12 @@ public class World extends JPanel{
         this.requestFocus();
     }
 
-    public static String userName = null;
-    public static void main (String[] args){
 
-        System.out.print("输入玩家名:");
-        Scanner input = new Scanner(System.in);
-        userName = input.next();
-        //System.out.println("游戏开始！");
-        System.out.println("点击游戏界面开始游戏！");
+    public static String userName = null;
+    public static void main (String[] args) throws SQLException {
+
+        userName = JOptionPane.showInputDialog("玩家姓名");
+
         JFrame jFrame = new JFrame();
         World world = new World();
         jFrame.add(world);
@@ -644,7 +657,7 @@ public class World extends JPanel{
         jFrame.setLocationRelativeTo(null);
         //是否可见、调用paint方法(上面重写的方法)
 
-        jFrame.setSize(400, 700);
+        jFrame.setSize(World.WIDTH, World.HEIGHT);
         //如果组件当前未显示,或者为null,则此窗口将会显示在屏幕的中央
         jFrame.setLocationRelativeTo(null);
         //是否可见
@@ -652,8 +665,4 @@ public class World extends JPanel{
         jFrame.setVisible(true);
         world.action();
     }
-
-
-
-
 }

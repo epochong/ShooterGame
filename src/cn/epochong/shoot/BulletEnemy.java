@@ -4,31 +4,21 @@ import java.awt.image.BufferedImage;
 
 /**
  * @author epochong
- * @date 2019/7/7 18:58
+ * @date 2019/7/8 21:33
  * @email epochong@163.com
  * @blog epochong.github.io
  * @describe
  */
-public class Boss extends FlyingObject implements Enemy{
-
+public class BulletEnemy extends FlyingObject implements Enemy {
     /**
      * 移动速度
      */
-
     private int speed;
 
-    public Boss() {
-        super(48,50);
-        speed = 2;
-    }
-
-    /**
-     * 小敌机移动
-     */
-    @Override
-    public void step() {
-        //向下移动speed距离
-        y += speed;
+    int life = 3;
+    public BulletEnemy(int x, int y) {
+        super(8,20,x,y);
+        speed = 4;
     }
 
     /**
@@ -38,16 +28,16 @@ public class Boss extends FlyingObject implements Enemy{
     @Override
     public BufferedImage getImage() {
         if (isAlive()) {
-            return Images.airplanes[0];
+            return Images.bulletEnemy[0];
         } else if (isDead()) {
             /**
              * 死亡状态
              */
-            BufferedImage image = Images.airplanes[index++];
+            BufferedImage image = Images.bulletEnemy[index++];
             /**
              * index达到最大值要删除对象
              */
-            if (index == Images.airplanes.length) {
+            if (index == Images.bulletEnemy.length) {
                 state = REMOVE;
             }
             return image;
@@ -58,10 +48,19 @@ public class Boss extends FlyingObject implements Enemy{
         return null;
     }
 
+    @Override
+    public BulletEnemy[] shoot() {
+        return new BulletEnemy[0];
+    }
+
+    @Override
+    public void step() {
+        //向下移动
+        y += speed;
+    }
 
     @Override
     public int getScore() {
-        //打掉小敌机玩家得一分
-        return 1;
+        return 0;
     }
 }

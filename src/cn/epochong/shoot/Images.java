@@ -47,10 +47,11 @@ public class Images {
      * 大敌机图
      */
     public static BufferedImage[] bigAirplanes;
+    public static BufferedImage[] bulletEnemy;
     /**
      * Boss
      */
-    public static BufferedImage[] boss;
+    //public static BufferedImage[] boss;
     /**
      * 小蜜蜂图
      */
@@ -66,7 +67,7 @@ public class Images {
         pause = readImage("pause.png");
         gameover = readImage("gameover.png");
 
-        background=readImage("background1.png");
+        background=readImage("background4.jpg");
         bullet=readImage("SHELL.png");
 
         smallShell = readImage("smallShell.png");
@@ -91,6 +92,7 @@ public class Images {
         bigAirplanes =new BufferedImage[5];
         lifes =new BufferedImage[5];
         fires = new BufferedImage[5];
+        bulletEnemy = new BufferedImage[5];
         /**
          * 原始图片初始化
          */
@@ -98,7 +100,8 @@ public class Images {
         bigAirplanes[0]=readImage("ep10.png");
         lifes[0]=readImage("life.png");
         fires[0]=readImage("gun.png");
-        boss[0] = readImage("");
+        bulletEnemy[0] = readImage("bullet.png");
+        //boss[0] = readImage("");
         /**
          * 存储公共的爆照图片
          */
@@ -107,6 +110,7 @@ public class Images {
             bigAirplanes[i]=readImage("bom"+i+".png");
             lifes[i]=readImage("bom"+i+".png");
             fires[i] = readImage("bom"+i+".png");
+            bulletEnemy[i] = readImage("bom" + i + ".png");
         }
     }
     /**

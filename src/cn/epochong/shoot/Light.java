@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  * @blog epochong.github.io
  * @describe
  */
-public class Light extends FlyingObject implements Shell{
+public class Light extends FlyingObject {
 
     /**
      * 移动速度

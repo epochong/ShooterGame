@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  * @blog epochong.github.io
  * @describe 子弹
  */
-public class Bullet extends FlyingObject implements Shell{
+public class Bullet extends FlyingObject {
 
     /**
      * 移动速度
@@ -39,12 +39,9 @@ public class Bullet extends FlyingObject implements Shell{
         } else if (isDead()) {
             state = REMOVE;
         }
-        /**
-         * 死了和删除都没有图片
-         */
+        //死了和删除都没有图片
         return null;
     }
-
     /**
      * 判断子弹是否越界
      * @return 越界返回true,未越界返回false

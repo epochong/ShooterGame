@@ -24,7 +24,7 @@ public class Hero extends FlyingObject{
 
 
     public Hero() {
-        super(97,139,140,400);
+        super(97,139,World.WIDTH / 2 - 150,World.HEIGHT / 2 + 100);
         /**
          * 初始值3条命
          */
@@ -56,7 +56,6 @@ public class Hero extends FlyingObject{
         this.x = x -this.width / 2;
         //英雄机的y坐标 = 鼠标的y - (英雄机的宽) / 2
         this.y = y - this.height / 2;
-
     }
 
     /**
@@ -72,6 +71,7 @@ public class Hero extends FlyingObject{
         }
         return null;
     }
+
 
     public Bullet[] shoot() {
          //英雄机的四分之一作为横方向的一小步
@@ -90,19 +90,6 @@ public class Hero extends FlyingObject{
             Bullet[] bullets = new Bullet[2];
             bullets[0] = new Bullet(this.x - 20,this.y - yStep);
             bullets[1] = new Bullet(this.x + 3 *  xStep - 20,this.y - yStep);
-
-
-           /* for (int i = 0; i < bullets.length; i++) {
-                bullets[i] = new Bullet(this.x + (i + 1) * xStep,this.y - yStep);
-            }
-
-*/
-            /*//无限火力
-            Bullet[] bullets = new Bullet[20];
-            for (int i = 0; i < bullets.length; i++) {
-                bullets[i] = new Bullet(i * xStep,this.y - yStep);
-            }*/
-            //doubleFire -= 2;
             return bullets;
         } else  if (doubleFire >= 10 && doubleFire < 15){
             Bullet[] bullets = new Bullet[3];

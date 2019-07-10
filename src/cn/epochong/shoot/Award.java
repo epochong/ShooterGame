@@ -18,10 +18,6 @@ public interface Award {
      */
     int LIFE = 1;
     /**
-     *
-     */
-    int TIME = 2;
-    /**
      * 获取奖励类型
      * @return
      */

@@ -17,7 +17,7 @@ public class BigAirplane extends FlyingObject implements Enemy{
 
     int life = 3;
     public BigAirplane() {
-        super(66,99);
+        super(119,89);
         speed = 2;
     }
 
@@ -58,5 +58,18 @@ public class BigAirplane extends FlyingObject implements Enemy{
     public int getScore() {
         //打掉大敌机得3分
         return 3;
+    }
+
+    @Override
+    public BulletEnemy[] shoot() {
+        //英雄机的四分之一作为横方向的一小步
+        int xStep = this.width / 3;
+        int yStep = 80;
+        /**
+         * 单倍火力
+         */
+        BulletEnemy[] bullets = new BulletEnemy[1];
+        bullets[0] = new BulletEnemy(this.x + 2 * xStep - 20,this.y + yStep);
+        return bullets;
     }
 }

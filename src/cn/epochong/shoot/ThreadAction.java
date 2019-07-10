@@ -7,10 +7,10 @@ package cn.epochong.shoot;
  * @blog epochong.github.io
  * @describe
  */
-public class ActionThread implements Runnable{
+public class ThreadAction implements Runnable{
     World world;
 
-    public ActionThread(World world) {
+    public ThreadAction(World world) {
         this.world = world;
     }
 

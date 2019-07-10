@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
  * @blog epochong.github.io
  * @describe
  */
-public class BigShell extends FlyingObject implements Shell{
+public class BigShell extends FlyingObject{
     /**
      * 移动速度
      */
